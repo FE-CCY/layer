@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="description" content="">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0">
+    <meta http-equiv="cleartype" content="on">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta http-equiv="x-rim--match" content="none">
+    <title>移动端web弹层组件</title>
+    <script src="http://zeptojs.com/zepto.min.js"></script>
+    <script src="./src/layer.js"></script>
+    <style>
+      @charset "utf-8";html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,figcaption,figure,footer,header,hgroup,menu,nav,section,summary,time,mark,audio,video,input{margin:0;padding:0;border:none;outline:0;vertical-align:baseline}html,body,form,fieldset,p,div,h1,h2,h3,h4,h5,h6{-webkit-text-size-adjust:none}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}button{margin:0}
+      html{-webkit-tap-highlight-color:rgba(0, 0, 0, 0);-webkit-text-size-adjust:100%;font-family: "Helvetica Neue", Helvetica, STHeiTi, Arial, sans-serif; }
+      body{font-size: 14px;line-height:1.25;color: #555;}
+      /* button */
+      .ui-btn{ -webkit-transition:opacity ease-in .2s; text-align: center; position:relative;display:inline-block; padding: 8px; border-radius: 5px;cursor:pointer;box-sizing: border-box;-webkit-user-select: none;font-size: 16px;line-height:1; border:0;white-space:nowrap;vertical-align:bottom; text-decoration:none; margin:0  5px 8px 0;}
+      .ui-btn:active{ color: #373e4e;opacity:.6;}
+      .ui-btn,.ui-btn:active,.ui-btn:visited { color: #fff;  background:#31a1f7;}
+      .p20{padding: 20px;}
+    </style>
+  </head>
+  <body>
+    <div class="p20">
+      <a href="javascript:;" class="ui-btn" data-type="loading">loading</a>
+      <a href="javascript:;" class="ui-btn" data-type="msg">msg</a>
+      <a href="javascript:;" class="ui-btn" data-type="alert">alert</a>
+      <a href="javascript:;" class="ui-btn" data-type="confirm">confirm</a>
+      <a href="javascript:;" class="ui-btn" data-type="dialog">dialog</a>
+      <a href="javascript:;" class="ui-btn" data-type="page">page</a>
+    </div>
+    <script>
+      $(function(){
+        
+        $(document).on('click','.ui-btn',function(){
+          var type = $(this).data('type');
+
+          switch(type){
+
+            case 'loading':
+              layer.loading();
+              setTimeout(function(){
+                layer.closeLoading();
+              },2000)
+              break;
+
+            case 'msg':
+              layer.msg('This is a message.');
+              break;
+
+            case 'alert':
+              layer.alert('Alert Dialog');
+              break;
+
+            case 'confirm':
+              layer.confirm('是否提交表单？',
+                function(){
+                    var that = this;
+                    layer.loading();
+                    setTimeout(function(){
+                      layer.closeLoading();
+                      that.close();
+                      layer.msg('提交成功！')
+                    },1000)
+                },function(){
+                });
+              break;
+
+            case 'dialog':
+              layer.dialog({
+                  btn: ['是', '否'],
+                  content: '<div>html content</div>',
+                  yes: function(){
+                    var that = this;
+                    layer.loading();
+                    setTimeout(function(){
+                      layer.closeLoading();
+                      that.close();
+                      layer.msg('提交成功！')
+                    },1000)
+                  },
+                  no: function(){}
+              });
+              break;
+
+            case 'page':
+              layer.page({ 
+                content: '<div class="p20"><p>自定义定位html内容弹出层</p><a class="ui-btn" href="javascript:layer.closeAll()" >关闭</a></div>',
+                style: 'position:fixed; left:0; top:0; width:100%; height:100%;overflow-y:auto;',
+                end: function () {
+                    console.log('close page');
+                }
+              })
+              break;
+
+            default:;
+          }
+        })
+
+      })
+    </script>
+  </body>
+  </html>  
